@@ -1,7 +1,7 @@
 # For more information, see: http://docs.haskellstack.org/en/stable/yaml_configuration.html
 
 # Specifies the GHC version and set of packages available (e.g., lts-3.5, nightly-2015-09-21, ghc-7.10.2)
-resolver: lts-20.16
+resolver: lts-21.25
 
 # Packages to be pulled from upstream that are not in the resolver (e.g., acme-missiles-0.3)
 extra-deps:
@@ -12,8 +12,9 @@ extra-deps:
 allow-different-user: true
 
 #      -O0: turn off optimizations
-# -dynamic: stop linker from static linking, which is slow. we don't need portability
 #       -j: use more cores
+# NOTE(Mark): There used to also be -dynamic but this was causing issues when I
+# updated GHC. I don't think static linking is slow enough to be worried about.
 ghc-options:
-  "$locals": -O0 -dynamic -j
+  "$locals": -O0 -j
 
