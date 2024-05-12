@@ -24,7 +24,7 @@ module Hw3 where
 import Prelude hiding (replicate, sum)
 import Data.List (foldl')
 
-foldLeft :: (a -> b -> a) -> a -> [b] -> a
+foldLeft :: (b -> a -> b) -> b -> [a] -> b
 foldLeft = foldl'
 
 --------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ foldLeft = foldl'
 sqSum :: [Int] -> Int
 sqSum xs = foldLeft f base xs
   where
-   f a x = error "TBD: sqSum f"
+   f acc x = error "TBD: sqSum f"
    base  = error "TBD: sqSum base"
 
 --------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ sqSum xs = foldLeft f base xs
 pipe :: [(a -> a)] -> (a -> a)
 pipe fs   = foldLeft f base fs
   where
-    f a x = error "TBD: pipe: f"
+    f acc x = error "TBD: pipe: f"
     base  = error "TBD: pipe: base"
 
 --------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ sepConcat :: String -> [String] -> String
 sepConcat sep []     = ""
 sepConcat sep (x:xs) = foldLeft f base l
   where
-    f a x            = error "TBD:sepConcat:f"
+    f acc x            = error "TBD:sepConcat:f"
     base             = error "TBD:sepConcat:base"
     l                = error "TBD:l"
 
@@ -160,7 +160,7 @@ bigAdd l1 l2     = removeZero res
   where
     (l1', l2')   = padZero l1 l2
     res          = foldLeft f base args
-    f a x        = error "TBD:bigAdd:f"
+    f acc x        = error "TBD:bigAdd:f"
     base         = error "TBD:bigAdd:base"
     args         = error "TBD:bigAdd:args"
 
@@ -188,6 +188,6 @@ bigMul :: BigInt -> BigInt -> BigInt
 bigMul l1 l2 = res
   where
     res      = foldLeft f base args
-    f a x    = error "TBD:bigMul:f"
+    f acc x    = error "TBD:bigMul:f"
     base     = error "TBD:bigMul:base"
     args     = error "TBD:bigMul:args"
