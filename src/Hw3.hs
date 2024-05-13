@@ -43,7 +43,7 @@ foldLeft = foldl'
 sqSum :: [Int] -> Int
 sqSum xs = foldLeft f base xs
   where
-   f acc x = acc + x^2
+   f acc x = acc + x * x
    base  = 0
 
 --------------------------------------------------------------------------------
@@ -126,7 +126,6 @@ type BigInt = [Int]
 --
 -- >>> padZero [9,9] [1,0,0,2]
 -- [0,0,9,9] [1,0,0,2]
---
 -- >>> padZero [1,0,0,2] [9,9]
 -- [1,0,0,2] [0,0,9,9]
 -- cited: https://www.haskell.org/hoogle
