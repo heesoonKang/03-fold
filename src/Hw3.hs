@@ -39,6 +39,7 @@ foldLeft = foldl'
 -- >>> sqSum [(-1), (-2), (-3), (-4)]
 -- 30
 
+-- cited: https://www.haskell.org/hoogle
 sqSum :: [Int] -> Int
 sqSum xs = foldLeft f base xs
   where
@@ -56,7 +57,7 @@ sqSum xs = foldLeft f base xs
 --
 -- >>> pipe [(\x -> x * 4), (\x -> x + x)] 3
 -- 24
-
+-- cited: https://www.haskell.org/hoogle
 pipe :: [(a -> a)] -> (a -> a)
 pipe fs   = foldLeft f base fs
   where
@@ -74,7 +75,7 @@ pipe fs   = foldLeft f base fs
 --
 -- >>> sepConcat "#" ["a","b","c","d","e"]
 -- "a#b#c#d#e"
-
+-- cited: https://www.haskell.org/hoogle
 sepConcat :: String -> [String] -> String
 sepConcat sep []     = ""
 sepConcat sep (x:xs) = foldLeft f base l
@@ -98,7 +99,7 @@ intString = show
 --
 -- >>> stringOfList (stringOfList show) [[1, 2, 3], [4, 5], [6], []]
 -- "[[1, 2, 3], [4, 5], [6], []]"
-
+-- cited: https://www.haskell.org/hoogle
 stringOfList :: (a -> String) -> [a] -> String
 stringOfList f xs = "[" ++ sepConcat ", " (map f xs) ++ "]"
 
@@ -110,10 +111,10 @@ stringOfList f xs = "[" ++ sepConcat ", " (map f xs) ++ "]"
 --
 -- >>> clone "foo" 2
 -- ["foo", "foo"]
-
+-- cited: https://www.haskell.org/hoogle
 clone :: a -> Int -> [a]
 clone x n
-  | n <= 0 = []
+  | n == 0 = []
   | otherwise = x : clone x (n - 1)
 
 type BigInt = [Int]
@@ -128,7 +129,7 @@ type BigInt = [Int]
 --
 -- >>> padZero [1,0,0,2] [9,9]
 -- [1,0,0,2] [0,0,9,9]
-
+-- cited: https://www.haskell.org/hoogle
 padZero :: BigInt -> BigInt -> (BigInt, BigInt)
 padZero l1 l2
   | length l1 < length l2 = (clone 0 (length l2 - length l1) ++ l1, l2)
@@ -146,7 +147,7 @@ padZero l1 l2
 --
 -- >>> removeZero [0,0,0,0]
 -- []
-
+-- cited: https://www.haskell.org/hoogle
 removeZero :: BigInt -> BigInt
 removeZero ds = dropWhile (== 0) ds
 
@@ -159,7 +160,7 @@ removeZero ds = dropWhile (== 0) ds
 --
 -- >>> bigAdd [9, 9, 9, 9] [9, 9, 9]
 -- [1, 0, 9, 9, 8]
-
+-- cited: https://www.haskell.org/hoogle
 bigAdd :: BigInt -> BigInt -> BigInt
 bigAdd l1 l2     = removeZero res
   where
@@ -167,7 +168,16 @@ bigAdd l1 l2     = removeZero res
     res          = foldLeft f base args
     f (x:xs) (n1, n2) = (x + n1 + n2) `div` 10 : ((x + n1 + n2) `mod` 10 : xs)
     base         = [0]
-    args         = reverse $ zip (0 : l1') (0 : l2')
+    args         = reverse (zip l1' l2')
+
+--     bigAdd :: BigInt -> BigInt -> BigInt
+-- bigAdd l1 l2     = removeZero res
+--   where
+--     (l1', l2')   = padZero l1 l2
+--     res          = foldLeft f base args
+--     f acc x        = error "TBD:bigAdd:f"
+--     base         = error "TBD:bigAdd:base"
+--     args         = error "TBD:bigAdd:args"
 
 
 --------------------------------------------------------------------------------
@@ -176,14 +186,12 @@ bigAdd l1 l2     = removeZero res
 --
 -- >>> mulByDigit 9 [9,9,9,9]
 -- [8,9,9,9,1]
-
+-- cited: https://www.haskell.org/hoogle
 mulByDigit :: Int -> BigInt -> BigInt
-mulByDigit i n = removeZero res
-  where
-    res = foldLeft f base args
-    f (x:xs) y = (y * i + x) `div` 10 : ((y * i + x) `mod` 10 : xs)
-    base = [0]
-    args = reverse (0 : n)
+mulByDigit i n
+           | i == 0    = []
+           | i == 1    = (n)
+           | otherwise = (bigAdd (mulByDigit (i - 1) n) n)
 
 --------------------------------------------------------------------------------
 -- | `bigMul n1 n2` returns the `BigInt` representing the product of `n1` and `n2`.
@@ -193,7 +201,7 @@ mulByDigit i n = removeZero res
 --
 -- >>> bigMul [9,9,9,9,9] [9,9,9,9,9]
 -- [9,9,9,9,8,0,0,0,0,1]
-
+-- cited: https://www.haskell.org/hoogle
 bigMul :: BigInt -> BigInt -> BigInt
 bigMul l1 l2 = res
   where
